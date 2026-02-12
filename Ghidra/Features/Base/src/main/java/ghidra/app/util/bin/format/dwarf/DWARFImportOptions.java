@@ -76,6 +76,14 @@ public class DWARFImportOptions {
 	private static final String OPTION_IGNORE_PARAM_STORAGE_DESC =
 		"Ignore any function parameter storage info specifed, allow automatic layout.";
 
+	private static final String OPTION_IGNORE_FUNC_NAMES = "Ignore Function Names";
+	private static final String OPTION_IGNORE_FUNC_NAMES_DESC =
+		"Ignore any function names specified.";
+
+	private static final String OPTION_DO_THIS_CALLING_CONVENTION_FIXUP = "Do __thiscall calling convention fixup";
+	private static final String OPTION_DO_THIS_CALLING_CONVENTION_FIXUP_DESC =
+		"Automatically recognize the __thiscall calling convention using function parameter names.";
+
 	private static final String OPTION_DEFAULT_CC = "Default Calling Convention";
 	private static final String OPTION_DEFAULT_CC_DESC =
 		"Name of default calling convention to assign to functions (e.g. __cdecl, __stdcall, etc), or leave blank.";
@@ -135,6 +143,8 @@ public class DWARFImportOptions {
 	private boolean useBookmarks = true;
 	private boolean outputSourceLineInfo = true;
 	private boolean ignoreParamStorage = false;
+	private boolean ignoreFuncNames = false;
+	private boolean doThisCallingConventionFixup = true;
 	private String defaultCC = "";
 	private long maxSourceMapEntryLength = 2000;
 	private boolean copyExternalDebugFileSymbols = true;
@@ -447,6 +457,22 @@ public class DWARFImportOptions {
 		this.ignoreParamStorage = ignoreParamStorage;
 	}
 
+	public boolean isIgnoreFuncNames() {
+		return ignoreFuncNames;
+	}
+
+	public void setIgnoreFuncNames(boolean ignoreFuncNames) {
+		this.ignoreFuncNames = ignoreFuncNames;
+	}
+
+	public boolean isDoThisCallingConventionFixup() {
+		return ignoreFuncNames;
+	}
+
+	public void setDoThisCallingConventionFixup(boolean doThisCallingConventionFixup) {
+		this.doThisCallingConventionFixup = doThisCallingConventionFixup;
+	}
+
 	public String getDefaultCC() {
 		return defaultCC;
 	}
@@ -567,7 +593,11 @@ public class DWARFImportOptions {
 
 		options.registerOption(OPTION_IGNORE_PARAM_STORAGE, isIgnoreParamStorage(), null,
 			OPTION_IGNORE_PARAM_STORAGE_DESC);
+		options.registerOption(OPTION_IGNORE_FUNC_NAMES, isIgnoreFuncNames(), null,
+			OPTION_IGNORE_FUNC_NAMES_DESC);
 
+		options.registerOption(OPTION_DO_THIS_CALLING_CONVENTION_FIXUP, isDoThisCallingConventionFixup(), null,
+			OPTION_DO_THIS_CALLING_CONVENTION_FIXUP_DESC);
 		options.registerOption(OPTION_DEFAULT_CC, getDefaultCC(), null, OPTION_DEFAULT_CC_DESC);
 		options.registerOption(OPTION_MAX_SOURCE_ENTRY_LENGTH, maxSourceMapEntryLength, null,
 			OPTION_MAX_SOURCE_ENTRY_LENGTH_DESC);
@@ -609,6 +639,10 @@ public class DWARFImportOptions {
 			options.getBoolean(OPTION_SOURCE_LINEINFO, isOutputSourceLineInfo()));
 		setIgnoreParamStorage(
 			options.getBoolean(OPTION_IGNORE_PARAM_STORAGE, isIgnoreParamStorage()));
+		setIgnoreFuncNames(
+			options.getBoolean(OPTION_IGNORE_FUNC_NAMES, isIgnoreFuncNames()));
+		setDoThisCallingConventionFixup(
+			options.getBoolean(OPTION_DO_THIS_CALLING_CONVENTION_FIXUP, isDoThisCallingConventionFixup()));
 		setDefaultCC(options.getString(OPTION_DEFAULT_CC, getDefaultCC()));
 		setMaxSourceMapEntryLength(
 			options.getLong(OPTION_MAX_SOURCE_ENTRY_LENGTH, getMaxSourceMapEntryLength()));

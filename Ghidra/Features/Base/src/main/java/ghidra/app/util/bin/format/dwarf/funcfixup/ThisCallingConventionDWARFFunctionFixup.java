@@ -29,6 +29,9 @@ public class ThisCallingConventionDWARFFunctionFixup implements DWARFFunctionFix
 
 	@Override
 	public void fixupDWARFFunction(DWARFFunction dfunc) {
+		if (!dfunc.getProgram().getImportOptions().isDoThisCallingConventionFixup()) {
+			return;
+		}
 		if (dfunc.params.isEmpty() || dfunc.callingConventionName != null) {
 			// if someone else set calling convention, don't override it
 			return;
