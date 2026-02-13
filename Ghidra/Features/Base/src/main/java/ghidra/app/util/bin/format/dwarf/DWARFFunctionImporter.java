@@ -516,16 +516,8 @@ public class DWARFFunctionImporter {
 	private void addCommentsForInlineFunc(DIEAggregate diea, AddressRange range) {
 		FunctionDefinition funcDef = dwarfDTM.getFunctionSignature(diea);
 		if (funcDef != null) {
-			long inlineFuncLen = range.getLength();
-			boolean isShort = inlineFuncLen < INLINE_FUNC_SHORT_LEN;
-			if (isShort) {
-				appendComment(range.getMinAddress(), CommentType.EOL,
-					"inline " + funcDef.getPrototypeString(), "; ");
-			}
-			else {
-				appendComment(range.getMinAddress(), CommentType.PRE,
-					"Begin: inline " + funcDef.getPrototypeString(), "\n");
-			}
+			appendComment(range.getMinAddress(), CommentType.PRE,
+				"Begin: inline " + funcDef.getPrototypeString(), "\n");
 		}
 	}
 
